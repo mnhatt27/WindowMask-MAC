@@ -1,0 +1,8 @@
+.build/
+dist/
+node_modules/
+__pycache__/
+*.pyc
+*.p12
+*.pfx
+.DS_Store

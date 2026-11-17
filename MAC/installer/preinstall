@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+# The freshly built native helper is in this pkg's Scripts directory.
+"$(dirname "$0")/WindowMaskStop" --stop
+target='/Applications/WindowMask Backend.app'
+case "$target" in '/Applications/WindowMask Backend.app') ;; *) exit 1 ;; esac
+if [ -L "$target" ]; then
+    echo 'Refusing to replace a linked application.' >&2
+    exit 1
+fi
+# rm does not follow directory symlinks inside this exact app bundle.
+if [ -d "$target" ]; then /bin/rm -rf "$target"; fi

@@ -1,0 +1,20 @@
+{
+  "manifestVersion": 5,
+  "id": "com.mystic.windowmask.mac",
+  "name": "WINDOWMASK BY MYSTIC",
+  "version": "1.1.2",
+  "main": "index.html",
+  "icons": [{"width": 48, "height": 48, "path": "icons/plugin.png", "scale": [1], "theme": ["all"]}],
+  "host": {"app": "PS", "minVersion": "24.4.0", "data": {"apiVersion": 2}},
+  "requiredPermissions": {
+    "network": {"domains": ["http://127.0.0.1:8766"]},
+    "launchProcess": {"schemes": [], "extensions": ["app"]}
+  },
+  "entrypoints": [{
+    "type": "panel", "id": "windowmask", "label": {"default": "WINDOWMASK BY MYSTIC"},
+    "icons": [{"width": 23, "height": 23, "path": "icons/panel.png", "scale": [1], "theme": ["all"]}],
+    "minimumSize": {"width": 300, "height": 380},
+    "preferredDockedSize": {"width": 340, "height": 500},
+    "preferredFloatingSize": {"width": 340, "height": 500}
+  }]
+}

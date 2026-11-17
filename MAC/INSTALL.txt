@@ -1,0 +1,25 @@
+WINDOWMASK BY MYSTIC - MAC 1.1.2
+
+Yeu cau: macOS 13 tro len, Photoshop 24.4 tro len, Creative Cloud Desktop.
+Ho tro kien truc Apple Silicon (dong M) va Intel x86_64. Khong can Rosetta.
+
+1. Luu tai lieu va dong Photoshop truoc khi cai/cap nhat.
+2. Mo WindowMask Backend.pkg de cai backend vao /Applications.
+3. Mo com.mystic.windowmask.mac_PS.ccx va xac nhan cai trong Creative Cloud.
+4. Mo Photoshop > Plugins > WINDOWMASK BY MYSTIC.
+5. Nhap License Key, kich hoat va chon mot layer anh chua co mask.
+6. Nhan TAO SOFT MASK. Lan dau co the can them thoi gian chon CPU/CoreML.
+
+Backend tu khoi dong khi mo panel; khong can cai Python hay thu vien.
+Anh duoc xu ly tai may, khong gui len server. License dung he thong kich hoat hien tai.
+Khoa model va license duoc luu trong login Keychain; khong sao chep license Windows.
+Neu macOS hoi quyen Keychain, chi chap nhan doi voi WindowMask da cai tu nguon tin cay.
+
+BAN THU NGHIEM:
+Neu ten DMG co UNNOTARIZED-TEST, ban do chua duoc ky/notarize de phan phoi.
+Khong phat hanh cho khach truoc khi kiem thu Photoshop tren Mac va hoan tat ky Apple.
+Khong tat Gatekeeper de cai ban thu nghiem.
+
+Log: ~/Library/Application Support/WindowMaskMystic/Logs/backend.log
+Cap nhat backend dung tien trinh ban cu bang helper native, khong can Python cu.
+Cap nhat khong tu xoa tai lieu hay Keychain. Co the Undo mask bang Cmd+Z.

@@ -1,0 +1,95 @@
+name: Build WindowMask Mac
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["MAC/**", "shared/**", ".github/workflows/build-macos.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: arm64
+          - runner: macos-15-intel
+            arch: x86_64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 25
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "13.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime wheels compatible with macOS 13
+        run: |
+          python -m pip download --only-binary=:all: --platform macosx_13_0_${{ matrix.arch }} --python-version 3.12 --implementation cp --abi cp312 -r MAC/requirements-runtime.txt -d .build/wheels
+          python -m pip install --no-index --find-links .build/wheels -r MAC/requirements-runtime.txt
+          python -m pip install PyInstaller==6.22.3 pyinstaller-hooks-contrib==2026.10
+      - name: Prepare an isolated test Keychain
+        run: |
+          wm_test_password="$(openssl rand -hex 16)"
+          wm_test_keychain="$RUNNER_TEMP/windowmask-test.keychain-db"
+          security create-keychain -p "$wm_test_password" "$wm_test_keychain"
+          security unlock-keychain -p "$wm_test_password" "$wm_test_keychain"
+          security default-keychain -d user -s "$wm_test_keychain"
+          security list-keychains -d user -s "$wm_test_keychain"
+      - name: Check native architecture and unit tests
+        run: |
+          python -c "import platform; assert platform.machine() == '${{ matrix.arch }}'"
+          python MAC/tests/test_mac_port.py
+          node MAC/tests/test_pixels.cjs
+          node MAC/tests/test_panel.cjs
+      - name: Build and test native runtime
+        run: python MAC/build_runtime.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: runtime-${{ matrix.arch }}
+          path: runtime-${{ matrix.arch }}.tar.gz
+          if-no-files-found: error
+
+  package:
+    needs: native
+    runs-on: macos-15-intel
+    timeout-minutes: 25
+    env:
+      MAC_CODESIGN_IDENTITY: ${{ secrets.MAC_CODESIGN_IDENTITY }}
+      MAC_INSTALLER_IDENTITY: ${{ secrets.MAC_INSTALLER_IDENTITY }}
+      MAC_CERTIFICATE_P12_BASE64: ${{ secrets.MAC_CERTIFICATE_P12_BASE64 }}
+      MAC_CERTIFICATE_PASSWORD: ${{ secrets.MAC_CERTIFICATE_PASSWORD }}
+      MAC_NOTARY_APPLE_ID: ${{ secrets.MAC_NOTARY_APPLE_ID }}
+      MAC_NOTARY_TEAM_ID: ${{ secrets.MAC_NOTARY_TEAM_ID }}
+      MAC_NOTARY_PASSWORD: ${{ secrets.MAC_NOTARY_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: runtime-*
+          merge-multiple: true
+          path: artifacts
+      - name: Install build-only packaging tools
+        run: |
+          python -m pip install Pillow==11.3.0
+          npm ci --prefix MAC/ci --ignore-scripts --no-audit --no-fund
+      - name: Configure optional Apple signing
+        run: python MAC/ci/configure_signing.py
+      - name: Assemble both architectures and package with Adobe tools
+        run: python MAC/package_macos.py --artifacts artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WindowMask-Mac-1.1.2
+          path: dist/*
+          if-no-files-found: error

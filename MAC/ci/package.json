@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "description": "Build-only Adobe CCX packager; nothing here ships in the backend",
+  "dependencies": {"@adobe/uxp-devtools-core": "1.2.0"}
+}

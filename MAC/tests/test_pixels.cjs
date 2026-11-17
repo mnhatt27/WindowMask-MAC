@@ -1,0 +1,18 @@
+"use strict";
+const assert = require("node:assert/strict");
+const {fullCanvasRGB, sameTarget} = require("../uxp/pixels.js");
+const info = {width: 2, height: 2, components: 3, componentSize: 8};
+const data = Uint8Array.from([1,2,3, 4,5,6, 7,8,9, 10,11,12]);
+const canvas = fullCanvasRGB(data, info, {left: 1, top: 1}, 4, 4);
+assert.equal(canvas.length, 48);
+assert.deepEqual([...canvas.subarray(15, 21)], [1,2,3,4,5,6]);
+assert.deepEqual([...canvas.subarray(27, 33)], [7,8,9,10,11,12]);
+assert.deepEqual([...canvas.subarray(0, 12)], Array(12).fill(255));
+const clipped = fullCanvasRGB(data, info, {left: -1, top: -1}, 1, 1);
+assert.deepEqual([...clipped], [10,11,12]);
+assert.throws(() => fullCanvasRGB(data, {...info, components: 4}, {left: 0, top: 0}, 4, 4));
+assert.throws(() => fullCanvasRGB(data, info, {left: 0, top: 0}, 100000, 100000));
+const target = {documentID: 1, layerID: 2, width: 4, height: 4, historyID: 3};
+assert.equal(sameTarget(target, {...target}), true);
+for (const field of Object.keys(target)) assert.equal(sameTarget(target, {...target, [field]: 99}), false);
+console.log("Passed: full-size RGB placement, white padding, clipping and target validation.");

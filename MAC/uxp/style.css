@@ -1,0 +1,7 @@
+body { padding: 18px; color: #eee; background: #292929; font-size: 13px; }
+h2 { font-size: 20px; margin-bottom: 12px; } small { font-size: 10px; color: #aaa; }
+p { line-height: 1.5; margin: 12px 0; } input { width: 100%; margin: 8px 0; }
+button { margin: 6px 0; width: 100%; min-height: 32px; }
+.row { display: flex; gap: 8px; } .row button { flex: 1; }
+#create { background: #2563df; color: white; margin-top: 18px; }
+#status { color: #b8d0fa; } [hidden] { display: none; }

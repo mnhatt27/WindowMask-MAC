@@ -1,0 +1,11 @@
+{
+  "format": "onnx-probability-fp32",
+  "tile_size": 768,
+  "stride": 576,
+  "input": "RGB ImageNet-normalised NCHW float32",
+  "opset": 17,
+  "checkpoint_sha256": "68a3f09e658f68bc3b524838c9f50a82115aa36e584f0f87fa2fbd35ef5fce92",
+  "onnx_sha256": "ca2e7d54151b70bdb17fe6049641301f68e598322162a5c7dd2ec512a6b91ed5",
+  "torch": "2.15.0+cpu",
+  "numpy": "2.5.4"
+}
