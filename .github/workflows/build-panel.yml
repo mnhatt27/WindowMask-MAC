@@ -1,0 +1,44 @@
+name: Build WindowMask Mac Panel
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["MAC/uxp/**", "MAC/build_panel.cjs", "MAC/package_plugin.cjs", "MAC/tests/*.cjs", "MAC/ci/package*.json", "MAC/ci/build-panel.yml", ".github/workflows/build-panel.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci --prefix MAC/ci --ignore-scripts --no-audit --no-fund
+      - name: Test network permissions and panel behavior
+        run: |
+          node MAC/tests/test_network.cjs
+          node MAC/tests/test_panel.cjs
+          node MAC/tests/test_pixels.cjs
+      - name: Package the panel with Adobe tools
+        run: node MAC/build_panel.cjs dist
+      - name: Verify packaged manifest and archive
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, zipfile
+          archive = next(pathlib.Path('dist').glob('*.ccx'))
+          with zipfile.ZipFile(archive) as package:
+              manifest = json.loads(package.read('manifest.json'))
+              assert manifest['requiredPermissions']['network']['domains'] == 'all'
+              assert 'backend.js' in package.namelist()
+              assert package.testzip() is None
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WindowMask-Mac-Panel
+          path: dist/*
+          if-no-files-found: error

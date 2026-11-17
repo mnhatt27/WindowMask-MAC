@@ -1,5 +1,21 @@
 # WindowMask Mac 1.1.2
 
+Panel hotfix **1.1.3** fixes UXP's localhost permission matching. Existing 1.1.2
+backend installations can install the new CCX directly. Save documents and quit
+Photoshop before updating; a manifest change requires a fresh plugin load.
+The panel shows `Mac · v1.1.3` so the installed revision can be checked.
+
+Affected UXP hosts reject the localhost/port domain list with "Manifest entry not
+found". The manifest now uses the documented `network.domains: "all"` form;
+`uxp/backend.js` centralizes requests to the fixed `127.0.0.1:8766` origin and
+known API routes, requesting no redirects. No user-provided URL is accepted.
+This is a host-compatibility workaround, not a runtime sandbox guarantee beyond
+UXP's manifest permissions. Real Photoshop confirmation remains necessary.
+
+The separate **Build WindowMask Mac Panel** workflow tests and packages the CCX
+without rebuilding unchanged native runtimes. Local command:
+`node MAC/build_panel.cjs MAC/dist` (after `npm ci --prefix MAC/ci --ignore-scripts`).
+
 Native backend for Apple Silicon (`arm64`, including M-series Macs) and Intel
 (`x86_64`), with a UXP Photoshop panel. Minimum target: **macOS 13**, **Photoshop
 24.4**, Creative Cloud Desktop. This does not promise support for old macOS or

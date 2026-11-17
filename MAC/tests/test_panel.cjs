@@ -35,6 +35,7 @@ async function panel({existingMask = false, changeTarget = false} = {}) {
     require(name) {
       if (name === "photoshop") return ps;
       if (name === "uxp") return {shell: {openPath: async () => ""}};
+      if (name === "./backend.js") return require("../uxp/backend.js");
       return require("../uxp/pixels.js");
     },
     fetch: async url => {

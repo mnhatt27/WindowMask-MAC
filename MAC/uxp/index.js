@@ -3,7 +3,9 @@
 const { app, core, imaging, action } = require("photoshop");
 const { shell } = require("uxp");
 const { fullCanvasRGB, sameTarget } = require("./pixels.js");
-const BASE = "http://127.0.0.1:8766";
+const { createBackend } = require("./backend.js");
+const backend = createBackend((url, options) => fetch(url, options));
+const jsonRequest = backend.json;
 const ui = Object.fromEntries(["key", "activate", "deactivate", "connect", "create", "retry", "status"]
   .map(id => [id, document.getElementById(id)]));
 let busy = false, entitled = false, ready = false, savedMask = null;
@@ -21,16 +23,8 @@ async function exclusive(work) {
   try { await work(); } catch (error) { status(error.message || String(error)); }
   finally { busy = false; update(); }
 }
-async function jsonRequest(path, payload) {
-  const options = payload === undefined ? {} : {
-    method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)
-  };
-  const response = await fetch(BASE + path, options);
-  const result = await response.json();
-  if (!response.ok || result.error || result.ok === false) throw new Error(result.error || "Backend từ chối yêu cầu.");
-  return result;
-}
 async function refreshLicense() {
+  entitled = false;
   const result = await jsonRequest("/license/status");
   entitled = result.status === "active";
   return result;
@@ -130,9 +124,7 @@ ui.create.addEventListener("click", () => exclusive(async () => {
   status("Đang đọc layer…");
   const {target, rgb} = await exportLayer();
   status("Đang nhận diện… Lần đầu có thể cần thêm thời gian chọn thiết bị.");
-  const response = await fetch(BASE + `/predict?width=${target.width}&height=${target.height}&components=3`, {
-    method: "POST", headers: {"Content-Type": "application/octet-stream"}, body: rgb.buffer
-  });
+  const response = await backend.predict(rgb, target.width, target.height);
   if (!response.ok) {
     const error = await response.json();
     if (response.status === 403) entitled = false;

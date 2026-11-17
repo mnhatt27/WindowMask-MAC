@@ -210,7 +210,11 @@ def main():
     with zipfile.ZipFile(ccx) as package:
         assert package.testzip() is None
         manifest = json.loads(package.read("manifest.json"))
-        assert manifest["version"] == VERSION and manifest["host"]["app"] == "PS"
+        panel_source = json.loads((MAC / "uxp/manifest.json").read_text())
+        assert (
+            manifest["version"] == panel_source["version"]
+            and manifest["host"]["app"] == "PS"
+        )
     shutil.copy2(MAC / "INSTALL.txt", image_root / "INSTALL.txt")
     signed = bool(identity and installer_identity)
     notarized = False
@@ -263,6 +267,7 @@ def main():
         json.dumps(
             {
                 "version": VERSION,
+                "panel_version": manifest["version"],
                 "architectures": reports,
                 "signed": signed,
                 "notarized": notarized,

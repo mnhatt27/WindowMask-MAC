@@ -57,6 +57,7 @@ def main():
         ):
             copy(source, Path("MAC") / source.relative_to(MAC))
     copy(MAC / "ci/build-macos.yml", Path(".github/workflows/build-macos.yml"))
+    copy(MAC / "ci/build-panel.yml", Path(".github/workflows/build-panel.yml"))
     (destination / ".gitattributes").write_text(
         "* text=auto eol=lf\n*.model binary\n*.onnx binary\n*.png binary\n",
         encoding="utf-8",

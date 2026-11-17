@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["MAC/**", "shared/**", ".github/workflows/build-macos.yml"]
+    paths: ["shared/**", "MAC/runtime/**", "MAC/installer/**", "MAC/backend.spec", "MAC/build_runtime.py", "MAC/stage_runtime.py", "MAC/package_macos.py", "MAC/requirements*.txt", "MAC/ci/build-macos.yml", ".github/workflows/build-macos.yml"]
 
 permissions:
   contents: read
@@ -51,6 +51,7 @@ jobs:
           python MAC/tests/test_mac_port.py
           node MAC/tests/test_pixels.cjs
           node MAC/tests/test_panel.cjs
+          node MAC/tests/test_network.cjs
       - name: Build and test native runtime
         run: python MAC/build_runtime.py
       - uses: actions/upload-artifact@v4
