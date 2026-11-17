@@ -1,0 +1,42 @@
+name: Verify built Mac DMG on Intel
+
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_run_id:
+        description: Successful package job's workflow run ID
+        required: true
+        type: string
+      source_ref:
+        description: Exact source commit that produced the DMG
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  verify-intel:
+    runs-on: macos-26-intel
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: WindowMask-Mac-1.1.3
+          path: dist
+          run-id: ${{ inputs.artifact_run_id }}
+          github-token: ${{ github.token }}
+      - name: Install and test the exact existing DMG
+        run: python MAC/tests/test_installed.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verified-existing-dmg-intel
+          path: dist/installed-*.json
+          if-no-files-found: error
