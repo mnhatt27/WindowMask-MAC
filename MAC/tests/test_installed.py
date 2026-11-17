@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import platform
 import subprocess
+import sys
 import time
 import urllib.request
 import zipfile
@@ -12,6 +13,8 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[2]
 WORK = ROOT / ".build/mac-installed-test"
 APP = Path("/Applications/WindowMask Backend.app")
+sys.path.insert(0, str(ROOT / "MAC/runtime"))
+from mac_entry import VERSION as RUNTIME_VERSION
 
 
 def run(*command, **kwargs):
@@ -75,7 +78,7 @@ def main():
     run(launcher, "--self-test", "--report", report_path, timeout=90)
     report = json.loads(report_path.read_text())
     assert report["ok"] and report["architecture"] == platform.machine()
-    assert report["version"] == source_manifest["version"]
+    assert report["version"] == RUNTIME_VERSION
     process = subprocess.Popen(
         [str(launcher), "--port", "18779", "--state-dir", str(WORK / "state")]
     )

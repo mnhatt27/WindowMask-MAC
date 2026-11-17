@@ -12,7 +12,14 @@ function createBackend(transport) {
     if (!ROUTES.has(route) || /[\\#\r\n]/.test(path)) {
       throw new Error("Đường dẫn backend không hợp lệ.");
     }
-    const response = await transport(ORIGIN + path, {...options, redirect: "error"});
+    let response;
+    try {
+      response = await transport(ORIGIN + path, {...options, redirect: "error"});
+    } catch (_) {
+      const error = new Error("Mất kết nối với WindowMask Backend. Hãy mở app trong Applications, rồi nhấn Kết nối backend.");
+      error.code = "BACKEND_UNAVAILABLE";
+      throw error;
+    }
     if (response.redirected || (response.url && !response.url.startsWith(ORIGIN + "/"))) {
       throw new Error("Backend trả về địa chỉ chuyển hướng không hợp lệ.");
     }

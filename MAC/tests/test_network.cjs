@@ -5,6 +5,7 @@ const {createBackend} = require("../uxp/backend.js");
 
 (async () => {
   assert.equal(manifest.requiredPermissions.network.domains, "all");
+  assert.deepEqual(manifest.requiredPermissions.launchProcess.extensions, [".app"]);
   const calls = [];
   const backend = createBackend(async (url, options) => {
     calls.push({url, options});
@@ -28,5 +29,8 @@ const {createBackend} = require("../uxp/backend.js");
   assert.equal(calls.length, 5);
   const redirected = createBackend(async () => ({url: "https://example.com", redirected: true}));
   await assert.rejects(redirected.json("/health"), /chuyển hướng/);
+  const offline = createBackend(async () => { throw new TypeError("Network request failed"); });
+  await assert.rejects(offline.json("/health"), error =>
+    error.code === "BACKEND_UNAVAILABLE" && error.message.includes("Applications"));
   console.log("Passed: manifest compatibility, all local API routes, binary upload, URL rejection and redirect refusal.");
 })().catch(error => {console.error(error); process.exitCode = 1;});

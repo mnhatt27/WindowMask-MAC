@@ -5,14 +5,14 @@ const assert = require("node:assert/strict");
 const code = fs.readFileSync(require("node:path").join(__dirname, "../uxp/index.js"), "utf8");
 const tick = () => new Promise(resolve => setImmediate(resolve));
 
-async function panel({existingMask = false, changeTarget = false} = {}) {
+async function panel({existingMask = false, changeTarget = false, stopped = false, denied = false} = {}) {
   const elements = {};
   for (const id of ["key", "activate", "deactivate", "connect", "create", "retry", "status"]) {
     elements[id] = {value: "", hidden: false, disabled: false, textContent: "", listeners: {},
       addEventListener(event, listener) { this.listeners[event] = listener; }};
   }
   const doc = {id: 1, width: 3, height: 2, activeLayers: [{id: 5}], activeHistoryState: {id: 10}};
-  const calls = {export: 0, apply: 0, inference: 0, commits: []};
+  const calls = {export: 0, apply: 0, inference: 0, launches: 0, commits: []};
   const ps = {
     app: {documents: [doc], activeDocument: doc},
     core: {executeAsModal: async work => work({hostControl: {
@@ -34,11 +34,20 @@ async function panel({existingMask = false, changeTarget = false} = {}) {
     document: {getElementById: id => elements[id]}, console, Uint8Array, setTimeout,
     require(name) {
       if (name === "photoshop") return ps;
-      if (name === "uxp") return {shell: {openPath: async () => ""}};
+      if (name === "uxp") return {shell: {openPath: async (path, reason) => {
+        assert.equal(path, "/Applications/WindowMask Backend.app");
+        assert.ok(reason);
+        assert.ok(require("../uxp/manifest.json").requiredPermissions.launchProcess.extensions.includes(".app"));
+        calls.launches++;
+        if (denied) return "Launch denied";
+        stopped = false;
+        return "";
+      }}};
       if (name === "./backend.js") return require("../uxp/backend.js");
       return require("../uxp/pixels.js");
     },
     fetch: async url => {
+      if (stopped) throw new TypeError("Network request failed");
       if (url.endsWith("/health")) return response({status: "ok"});
       if (url.endsWith("/license/status")) return response({status: "active"});
       calls.inference++;
@@ -78,5 +87,14 @@ async function panel({existingMask = false, changeTarget = false} = {}) {
   assert.equal(masked.calls.export, 0);
   assert.equal(masked.calls.inference, 0);
   assert.match(masked.elements.status.textContent, /đã có mask/);
+  const restarted = await panel({stopped: true});
+  assert.equal(restarted.calls.launches, 1);
+  assert.equal(restarted.elements.create.disabled, false);
+  const blocked = await panel({stopped: true, denied: true});
+  assert.equal(blocked.calls.launches, 1);
+  assert.equal(blocked.elements.create.disabled, true);
+  assert.equal(blocked.elements.connect.disabled, false);
+  assert.match(blocked.elements.status.textContent, /Launch denied/);
+  assert.match(blocked.elements.status.textContent, /Applications/);
   console.log("Passed: busy lock, one inference per click, apply, target-change refusal and existing-mask protection.");
 })().catch(error => { console.error(error); process.exitCode = 1; });

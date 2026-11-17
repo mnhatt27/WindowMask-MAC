@@ -20,7 +20,10 @@ function update() {
 async function exclusive(work) {
   if (busy) return;
   busy = true; update();
-  try { await work(); } catch (error) { status(error.message || String(error)); }
+  try { await work(); } catch (error) {
+    if (error.code === "BACKEND_UNAVAILABLE") { ready = false; entitled = false; }
+    status(error.message || String(error));
+  }
   finally { busy = false; update(); }
 }
 async function refreshLicense() {
@@ -34,8 +37,10 @@ async function connect() {
   status("Đang kết nối backend…");
   try { await jsonRequest("/health"); }
   catch (_) {
-    const error = await shell.openPath("/Applications/WindowMask Backend.app");
-    if (error) throw new Error("Hãy cài WindowMask Backend.pkg trước. " + error);
+    const error = await shell.openPath("/Applications/WindowMask Backend.app",
+      "Mở WindowMask Backend để xử lý ảnh trên máy này.");
+    if (error) throw new Error("Không mở được WindowMask Backend. " + error +
+      " Hãy mở WindowMask Backend trong Applications để xem thông báo của macOS.");
   }
   for (let attempt = 0; attempt < 60; attempt++) {
     try {
@@ -44,7 +49,8 @@ async function connect() {
     } catch (_) { /* The app may still be starting. */ }
     await new Promise(resolve => setTimeout(resolve, 500));
   }
-  if (!ready) throw new Error("Backend chưa sẵn sàng. Kiểm tra WindowMaskMystic/Logs trong Library/Application Support.");
+  if (!ready) throw new Error("Không kết nối được backend. Hãy mở WindowMask Backend trong Applications, " +
+    "rồi nhấn Kết nối backend. Nếu app không chạy, cần kiểm tra log khởi động.");
   try {
     await refreshLicense();
     status(entitled ? "Đã kết nối. Chọn layer ảnh để bắt đầu." : "Nhập License Key để kích hoạt.");
@@ -108,11 +114,13 @@ ui.connect.addEventListener("click", () => exclusive(connect));
 ui.activate.addEventListener("click", () => exclusive(async () => {
   const key = ui.key.value.trim();
   if (!key) throw new Error("Nhập License Key.");
+  if (!ready) await connect();
   status("Đang kích hoạt…");
   await jsonRequest("/license/activate", {license_key: key});
   ui.key.value = ""; await refreshLicense(); status("Kích hoạt thành công.");
 }));
 ui.deactivate.addEventListener("click", () => exclusive(async () => {
+  if (!ready) await connect();
   await jsonRequest("/license/deactivate", {});
   entitled = false; savedMask = null; status("Đã huỷ kích hoạt trên máy này.");
 }));

@@ -1,4 +1,18 @@
-# WindowMask Mac 1.1.3
+# WindowMask Mac — backend 1.1.3 / panel 1.1.4
+
+Panel hotfix **1.1.4** corrects the application's launch permission from `app`
+to `.app`, as required by Adobe's manifest v5 contract. Activation/deactivation
+first reconnect if the backend is not ready, and startup/network failures give
+an actionable message. Install `WindowMask-Mac-Panel-1.1.4.ccx` over the existing
+panel with Photoshop closed; the existing backend need not be reinstalled for
+this panel fix. The visible revision becomes `Mac · v1.1.4`.
+
+The customer's backend was unreachable even from Safari. This hotfix repairs a
+known launch-permission defect; it does **not** establish why the native app did
+not start on that machine. A direct launcher error/log is still required to
+distinguish installation, OS compatibility, security policy and runtime errors.
+macOS HTTP restrictions in UXP may also need separate transport validation once
+the backend is running. No Photoshop integration pass is claimed.
 
 The complete 1.1.3 DMG includes both native backend slices and panel 1.1.3.
 Final installation tests inspect the CCX manifest inside the DMG as well as
@@ -7,7 +21,7 @@ installing, starting and stopping the backend on each architecture.
 Panel hotfix **1.1.3** fixes UXP's localhost permission matching. Existing 1.1.2
 backend installations can install the new CCX directly. Save documents and quit
 Photoshop before updating; a manifest change requires a fresh plugin load.
-The panel shows `Mac · v1.1.3` so the installed revision can be checked.
+The original full DMG's panel shows `Mac · v1.1.3`.
 
 Affected UXP hosts reject the localhost/port domain list with "Manifest entry not
 found". The manifest now uses the documented `network.domains: "all"` form;
