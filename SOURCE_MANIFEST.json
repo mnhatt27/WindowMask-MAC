@@ -10,7 +10,7 @@
   "shared/config/windowmask_client.json": "3a89a0a88513355ca34939d1b62424579b411f199be5013fa7618c41e649ea83",
   "shared/packaging/runtime_smoke.onnx": "273da11a1262ac6edb0b607cc8c1ae56521b382983f5db2c729b4bfdb4e2c651",
   "MAC/backend.spec": "0626103671f147729c8a59b38ba39f7fe64f9e1d1ad9ed0ad32311bb678ca7b0",
-  "MAC/build_runtime.py": "1009e4ddde12ac60292e0cbac0e3e7b468e21802ba931f1251e1f9cb75092d7a",
+  "MAC/build_runtime.py": "7af97dfb65aa655496a16d6463fa1eb9415f97ca2fa26d61a76261ada48e7534",
   "MAC/INSTALL.txt": "05db227175d3246a5497a76d60f5b67a36c71f608f02ea7eb20dd29edffe2e86",
   "MAC/package_macos.py": "eb820a0d474009154151d1e93d53ea914e5c06cb886b0e49861eed8ea18be11a",
   "MAC/package_plugin.cjs": "3c7ff5ca989cc815d41a4a65e4894bf17507b2aadf75788c259c734b6c1ebf17",
