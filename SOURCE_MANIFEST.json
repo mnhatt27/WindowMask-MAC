@@ -12,14 +12,14 @@
   "MAC/backend.spec": "0626103671f147729c8a59b38ba39f7fe64f9e1d1ad9ed0ad32311bb678ca7b0",
   "MAC/build_runtime.py": "7af97dfb65aa655496a16d6463fa1eb9415f97ca2fa26d61a76261ada48e7534",
   "MAC/INSTALL.txt": "05db227175d3246a5497a76d60f5b67a36c71f608f02ea7eb20dd29edffe2e86",
-  "MAC/package_macos.py": "eb820a0d474009154151d1e93d53ea914e5c06cb886b0e49861eed8ea18be11a",
+  "MAC/package_macos.py": "721fd17e079d0a640f6a18fb4b1c7afb86ab89f0bce3a1c6561cce1fb7a60dd1",
   "MAC/package_plugin.cjs": "3c7ff5ca989cc815d41a4a65e4894bf17507b2aadf75788c259c734b6c1ebf17",
-  "MAC/prepare_repository.py": "bed697c5021b433ebb346c1be37910cceec1806509f2d062b560f57e056a8800",
+  "MAC/prepare_repository.py": "790c925973ed29550ef5852708eb3acddd01848698fdc31bebb1ceb6bfcbd280",
   "MAC/README.md": "850d28fe9906c8a32aaefda0dcdb40e3ea7efab1a3cd2dd5dafbfa6495407640",
   "MAC/requirements-build.txt": "481908f5d97297f3b74a0cf243e3526fd0e0c2b5f61c4e32eb7e3f7b8e746728",
   "MAC/requirements-runtime.txt": "1c824e64fd87561cfccdedff5b66cd36eabf5be471d91ad57c3241357b77ab92",
   "MAC/stage_runtime.py": "c08d7d43b44c5573b4ed0f4c66b75bada7e890a1a9337b236a6327eeb61f1f7d",
-  "MAC/ci/build-macos.yml": "a617bc8f4e7f443ce06ac485dbc7d65bf9c23a3767223f10d833e4228d0e60cf",
+  "MAC/ci/build-macos.yml": "556ea1261d2286c95eafca3046dca680e8912e630153f46b7ce1b15838926e81",
   "MAC/ci/configure_signing.py": "d540e23e5f32e0ca83b2ce4b073ac25efbbc0f3ba324e2eaa985e88e23072a1b",
   "MAC/ci/package-lock.json": "bbe8665b69748597eed51bb6da866a340473ea2d35c67d46e59a8dae48fac950",
   "MAC/ci/package.json": "5cd5110871b19cf85fe9e9bc8d22fff2f4830a1ecd5911d38fc508768fb65e49",
@@ -30,6 +30,7 @@
   "MAC/runtime/model_protection.py": "c0621d717069a5390563c103ed9f053c9983c7c992c3ecd28d0556249c16b900",
   "MAC/runtime/windowmask_engines.py": "a4548aa58e06e41e652e7faff400772e0faa8745210145815bdd32c5d4faffb8",
   "MAC/runtime/windowmask_inference.py": "adcdbad9b8148cc95cfd2174e998a9352122633ea1a79f51644bf13d2df59fd1",
+  "MAC/tests/test_installed.py": "bc723718f8336dbb6bf30a1436cac37b70cf7dedd64508663b54b796b31dfdc2",
   "MAC/tests/test_mac_port.py": "f29fcbf3d494203f0fddeea45bf1a6358c5d2d528f059e2bb3aa70bd108231be",
   "MAC/tests/test_panel.cjs": "f2c1e4a56a0327dc0b21d4c6eac8ef220838c91f3e2a4637f49b6eb19efe9b6a",
   "MAC/tests/test_pixels.cjs": "6c7dcbcdbef1b82e31ec266527c01fe91ec59913eb2a0f033e0d9554c4a5bab5",
@@ -40,5 +41,5 @@
   "MAC/uxp/style.css": "8a2ee04ab33e76ffcacca8537a12eae61b51327813fc167be44fcf16be213ed3",
   "MAC/uxp/icons/panel.png": "f71e1fa334988af17291bda9dfa3f17c1f568245aba6e0565c156e673efac206",
   "MAC/uxp/icons/plugin.png": "8c49d5ca914386d22eaa002d726dab062e6b491a571207fac548aff3bdbf25e5",
-  ".github/workflows/build-macos.yml": "a617bc8f4e7f443ce06ac485dbc7d65bf9c23a3767223f10d833e4228d0e60cf"
+  ".github/workflows/build-macos.yml": "556ea1261d2286c95eafca3046dca680e8912e630153f46b7ce1b15838926e81"
 }

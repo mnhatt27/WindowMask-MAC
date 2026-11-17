@@ -23,7 +23,9 @@ def main():
         if source.suffix.lower() in {".png", ".onnx", ".model"}:
             shutil.copy2(source, target)
         else:
-            target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8", newline="\n")
+            target.write_text(
+                source.read_text(encoding="utf-8"), encoding="utf-8", newline="\n"
+            )
         exported.append(target)
 
     for name in FILES:
@@ -37,12 +39,28 @@ def main():
             continue
         if (
             source.suffix
-            in {".py", ".c", ".cjs", ".json", ".txt", ".md", ".spec", ".png", ".js", ".html", ".css", ".yml"}
+            in {
+                ".py",
+                ".c",
+                ".cjs",
+                ".json",
+                ".txt",
+                ".md",
+                ".spec",
+                ".png",
+                ".js",
+                ".html",
+                ".css",
+                ".yml",
+            }
             or source.name == "preinstall"
         ):
             copy(source, Path("MAC") / source.relative_to(MAC))
     copy(MAC / "ci/build-macos.yml", Path(".github/workflows/build-macos.yml"))
-    (destination / ".gitattributes").write_text("* text=auto eol=lf\n*.model binary\n*.onnx binary\n*.png binary\n", encoding="utf-8")
+    (destination / ".gitattributes").write_text(
+        "* text=auto eol=lf\n*.model binary\n*.onnx binary\n*.png binary\n",
+        encoding="utf-8",
+    )
     (destination / ".gitignore").write_text(
         ".build/\ndist/\nnode_modules/\n__pycache__/\n*.pyc\n*.p12\n*.pfx\n.DS_Store\n",
         encoding="utf-8",

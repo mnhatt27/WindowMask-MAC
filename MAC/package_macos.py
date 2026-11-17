@@ -86,6 +86,29 @@ def main():
             contents / f"Resources/runtimes/{architecture}",
         )
         assert reports[architecture]["architecture"] == architecture
+    # Both slices use identical encrypted weights. Keep one copy in the bundle
+    # and preserve the original runtime-relative model paths through local links.
+    shared_models = contents / "Resources/models"
+    shared_models.mkdir()
+    for name in ("windowmask_onnx.model", "windowmask_onnx.json"):
+        shared_model = shared_models / name
+        digest = None
+        for architecture in ("arm64", "x86_64"):
+            model = (
+                contents
+                / f"Resources/runtimes/{architecture}/WindowMaskRuntime/_internal/models/{name}"
+            )
+            with model.open("rb") as stream:
+                current = hashlib.file_digest(stream, "sha256").hexdigest()
+            if digest is None:
+                digest = current
+                model.replace(shared_model)
+            else:
+                if current != digest:
+                    raise ValueError("Native slices contain different model weights.")
+                model.unlink()
+            model.symlink_to(os.path.relpath(shared_model, model.parent))
+            assert model.resolve() == shared_model.resolve()
     launcher = contents / "MacOS/WindowMaskLauncher"
     run(
         "clang",
@@ -102,7 +125,7 @@ def main():
         "-o",
         launcher,
     )
-    run("lipo", "-verify_arch", "arm64", "x86_64", launcher)
+    run("lipo", launcher, "-verify_arch", "arm64", "x86_64")
     info = {
         "CFBundleIdentifier": "com.mystic.windowmask.backend",
         "CFBundleName": "WindowMask Backend",
@@ -157,12 +180,20 @@ def main():
     image_root.mkdir()
     pkg = image_root / "WindowMask Backend.pkg"
     installer_identity = os.environ.get("MAC_INSTALLER_IDENTITY", "").strip()
+    component_plist = work / "components.plist"
+    run("pkgbuild", "--analyze", "--root", payload, component_plist)
+    components = plistlib.loads(component_plist.read_bytes())
+    for component in components:
+        component["BundleIsRelocatable"] = False
+    component_plist.write_bytes(plistlib.dumps(components))
     command = [
         "pkgbuild",
         "--root",
         payload,
         "--scripts",
         scripts,
+        "--component-plist",
+        component_plist,
         "--identifier",
         "com.mystic.windowmask.backend.pkg",
         "--version",

@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: windowmask-mac-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   native:
     strategy:
@@ -92,4 +96,29 @@ jobs:
         with:
           name: WindowMask-Mac-1.1.2
           path: dist/*
+          if-no-files-found: error
+
+  install-test:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          name: WindowMask-Mac-1.1.2
+          path: dist
+      - name: Install final pkg, validate native dispatch and native stop
+        run: python MAC/tests/test_installed.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: installed-test-${{ matrix.runner }}
+          path: dist/installed-*.json
           if-no-files-found: error
