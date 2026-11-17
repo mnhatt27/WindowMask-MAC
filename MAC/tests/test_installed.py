@@ -7,6 +7,7 @@ import platform
 import subprocess
 import time
 import urllib.request
+import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 WORK = ROOT / ".build/mac-installed-test"
@@ -24,6 +25,13 @@ def main():
     mount.mkdir(exist_ok=True)
     run("hdiutil", "attach", image, "-readonly", "-nobrowse", "-mountpoint", mount)
     try:
+        source_manifest = json.loads((ROOT / "MAC/uxp/manifest.json").read_text())
+        with zipfile.ZipFile(mount / "com.mystic.windowmask.mac_PS.ccx") as panel:
+            panel_manifest = json.loads(panel.read("manifest.json"))
+            assert panel_manifest["version"] == source_manifest["version"]
+            assert panel_manifest["requiredPermissions"]["network"]["domains"] == "all"
+            assert "backend.js" in panel.namelist()
+            assert panel.testzip() is None
         run(
             "sudo",
             "installer",
@@ -48,6 +56,7 @@ def main():
     run(launcher, "--self-test", "--report", report_path, timeout=90)
     report = json.loads(report_path.read_text())
     assert report["ok"] and report["architecture"] == platform.machine()
+    assert report["version"] == source_manifest["version"]
     process = subprocess.Popen(
         [str(launcher), "--port", "18779", "--state-dir", str(WORK / "state")]
     )
@@ -78,6 +87,8 @@ def main():
         native_launcher_tested=True,
         native_stop_tested=True,
         shared_model_links_valid=True,
+        panel_version=panel_manifest["version"],
+        bundled_panel_manifest_tested=True,
         dmg_sha256=hashlib.sha256(image.read_bytes()).hexdigest(),
     )
     destination = ROOT / "dist" / f"installed-{platform.machine()}.json"

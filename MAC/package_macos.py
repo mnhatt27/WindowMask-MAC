@@ -16,7 +16,7 @@ import zipfile
 
 MAC = Path(__file__).resolve().parent
 ROOT = MAC.parent
-VERSION = "1.1.2"
+VERSION = "1.1.3"
 
 
 def run(*args, **kwargs):

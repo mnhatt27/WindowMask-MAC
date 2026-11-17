@@ -1,4 +1,8 @@
-# WindowMask Mac 1.1.2
+# WindowMask Mac 1.1.3
+
+The complete 1.1.3 DMG includes both native backend slices and panel 1.1.3.
+Final installation tests inspect the CCX manifest inside the DMG as well as
+installing, starting and stopping the backend on each architecture.
 
 Panel hotfix **1.1.3** fixes UXP's localhost permission matching. Existing 1.1.2
 backend installations can install the new CCX directly. Save documents and quit

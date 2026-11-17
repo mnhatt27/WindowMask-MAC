@@ -16,7 +16,7 @@ import threading
 if not getattr(sys, "frozen", False):
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-VERSION = "1.1.2"
+VERSION = "1.1.3"
 
 
 @contextmanager
