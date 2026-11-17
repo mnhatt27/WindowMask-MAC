@@ -1,4 +1,4 @@
-name: Verify built Mac DMG on Intel
+name: Verify built Mac DMG
 
 on:
   workflow_dispatch:
@@ -8,17 +8,22 @@ on:
         required: true
         type: string
       source_ref:
-        description: Exact source commit that produced the DMG
+        description: Source commit containing verification tests
         required: true
         type: string
+      runner:
+        description: Native macOS runner
+        type: choice
+        default: macos-15
+        options: [macos-15, macos-15-intel, macos-26-intel]
 
 permissions:
   contents: read
   actions: read
 
 jobs:
-  verify-intel:
-    runs-on: macos-26-intel
+  verify:
+    runs-on: ${{ inputs.runner }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +42,6 @@ jobs:
         run: python MAC/tests/test_installed.py
       - uses: actions/upload-artifact@v4
         with:
-          name: verified-existing-dmg-intel
+          name: verified-existing-dmg-${{ inputs.runner }}
           path: dist/installed-*.json
           if-no-files-found: error

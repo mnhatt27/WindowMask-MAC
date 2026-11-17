@@ -25,7 +25,7 @@
   "MAC/ci/configure_signing.py": "d540e23e5f32e0ca83b2ce4b073ac25efbbc0f3ba324e2eaa985e88e23072a1b",
   "MAC/ci/package-lock.json": "bbe8665b69748597eed51bb6da866a340473ea2d35c67d46e59a8dae48fac950",
   "MAC/ci/package.json": "5cd5110871b19cf85fe9e9bc8d22fff2f4830a1ecd5911d38fc508768fb65e49",
-  "MAC/ci/verify-mac-dmg.yml": "9cde52e7639ac0085adfb434b7bbfe5895f1581ba685fced38b0eaa3b3f9c323",
+  "MAC/ci/verify-mac-dmg.yml": "2a120ce3d34e56cdc855490949cd16dc1af302a1bb8ea4137f9146ebbc194c7a",
   "MAC/installer/launcher.c": "4fbe0483367db5a44e76e7cb23e3afa203f90522fecc108d4ca75da3e26ac7e5",
   "MAC/installer/preinstall": "0fd5b2b308638c85e2efa95621ab45f6a3a6ea0aa8d88274fab15663771703ef",
   "MAC/runtime/mac_entry.py": "543c469b38cc62ec7c5fd91419c85fe80a52bbf182108a492090cc74cba2ad1f",
@@ -33,7 +33,7 @@
   "MAC/runtime/model_protection.py": "c0621d717069a5390563c103ed9f053c9983c7c992c3ecd28d0556249c16b900",
   "MAC/runtime/windowmask_engines.py": "a4548aa58e06e41e652e7faff400772e0faa8745210145815bdd32c5d4faffb8",
   "MAC/runtime/windowmask_inference.py": "adcdbad9b8148cc95cfd2174e998a9352122633ea1a79f51644bf13d2df59fd1",
-  "MAC/tests/test_installed.py": "f1d89c793f06a2154635004857bc83f354eb0bcf0ce798ffabf232aae1c1384d",
+  "MAC/tests/test_installed.py": "2fceaf8708ec0eac26a64699848affb5ccb5fbc4860a4ac04ad8b19bc12f7106",
   "MAC/tests/test_mac_port.py": "f29fcbf3d494203f0fddeea45bf1a6358c5d2d528f059e2bb3aa70bd108231be",
   "MAC/tests/test_network.cjs": "656c3c3872b2d1f24d2cdf9121efd7700cb6d2b1a1b70b672c80df9af0e1e258",
   "MAC/tests/test_panel.cjs": "9944c6d0a75dcca41bf86426907a4d8efb32243d2bf94045a0208bf578890ef0",
@@ -48,5 +48,5 @@
   "MAC/uxp/icons/plugin.png": "8c49d5ca914386d22eaa002d726dab062e6b491a571207fac548aff3bdbf25e5",
   ".github/workflows/build-macos.yml": "2af595a1e05200f4044199a7b8f15edd0bb1d2fffe86134fc5a58df6bfb36a3a",
   ".github/workflows/build-panel.yml": "6d18c3a57c60aad8926b7226b677148a36af59225d49269246c75c27044aa675",
-  ".github/workflows/verify-mac-dmg.yml": "9cde52e7639ac0085adfb434b7bbfe5895f1581ba685fced38b0eaa3b3f9c323"
+  ".github/workflows/verify-mac-dmg.yml": "2a120ce3d34e56cdc855490949cd16dc1af302a1bb8ea4137f9146ebbc194c7a"
 }
