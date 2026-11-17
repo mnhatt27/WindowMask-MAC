@@ -25,7 +25,7 @@
   "MAC/ci/package.json": "5cd5110871b19cf85fe9e9bc8d22fff2f4830a1ecd5911d38fc508768fb65e49",
   "MAC/installer/launcher.c": "4fbe0483367db5a44e76e7cb23e3afa203f90522fecc108d4ca75da3e26ac7e5",
   "MAC/installer/preinstall": "0fd5b2b308638c85e2efa95621ab45f6a3a6ea0aa8d88274fab15663771703ef",
-  "MAC/runtime/mac_entry.py": "541865c3cf4237d91a49708f9a112755300a702123b252ba8eac2632baeb92f9",
+  "MAC/runtime/mac_entry.py": "379b0b24151f2216240826b2a97e059925879240e9eca39e6e7eb5944ef3b7c9",
   "MAC/runtime/mac_keychain.py": "6531620e9fb723415a02342ae31c789a6792531b60e1df9d3f3dde160def4a17",
   "MAC/runtime/model_protection.py": "c0621d717069a5390563c103ed9f053c9983c7c992c3ecd28d0556249c16b900",
   "MAC/runtime/windowmask_engines.py": "a4548aa58e06e41e652e7faff400772e0faa8745210145815bdd32c5d4faffb8",

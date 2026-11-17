@@ -10,6 +10,7 @@ from logging.handlers import RotatingFileHandler
 import os
 from pathlib import Path
 import signal
+import sys
 import threading
 
 if not getattr(sys, "frozen", False):
