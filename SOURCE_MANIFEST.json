@@ -20,7 +20,7 @@
   "MAC/requirements-build.txt": "481908f5d97297f3b74a0cf243e3526fd0e0c2b5f61c4e32eb7e3f7b8e746728",
   "MAC/requirements-runtime.txt": "1c824e64fd87561cfccdedff5b66cd36eabf5be471d91ad57c3241357b77ab92",
   "MAC/stage_runtime.py": "c08d7d43b44c5573b4ed0f4c66b75bada7e890a1a9337b236a6327eeb61f1f7d",
-  "MAC/ci/build-macos.yml": "c4188bfff2ce407e550e4614f951a922d4d4e99b5abe2b293473fc67da78f632",
+  "MAC/ci/build-macos.yml": "2af595a1e05200f4044199a7b8f15edd0bb1d2fffe86134fc5a58df6bfb36a3a",
   "MAC/ci/build-panel.yml": "6d18c3a57c60aad8926b7226b677148a36af59225d49269246c75c27044aa675",
   "MAC/ci/configure_signing.py": "d540e23e5f32e0ca83b2ce4b073ac25efbbc0f3ba324e2eaa985e88e23072a1b",
   "MAC/ci/package-lock.json": "bbe8665b69748597eed51bb6da866a340473ea2d35c67d46e59a8dae48fac950",
@@ -45,6 +45,6 @@
   "MAC/uxp/style.css": "8a2ee04ab33e76ffcacca8537a12eae61b51327813fc167be44fcf16be213ed3",
   "MAC/uxp/icons/panel.png": "f71e1fa334988af17291bda9dfa3f17c1f568245aba6e0565c156e673efac206",
   "MAC/uxp/icons/plugin.png": "8c49d5ca914386d22eaa002d726dab062e6b491a571207fac548aff3bdbf25e5",
-  ".github/workflows/build-macos.yml": "c4188bfff2ce407e550e4614f951a922d4d4e99b5abe2b293473fc67da78f632",
+  ".github/workflows/build-macos.yml": "2af595a1e05200f4044199a7b8f15edd0bb1d2fffe86134fc5a58df6bfb36a3a",
   ".github/workflows/build-panel.yml": "6d18c3a57c60aad8926b7226b677148a36af59225d49269246c75c27044aa675"
 }
